@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + '/../unit_test_helper'
+require File.join(File.dirname(__FILE__), *%w[test_helper])
+
+require 'simple_config'
 
 class SimpleConfigConfigTest < Test::Unit::TestCase
   
