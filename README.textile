@@ -18,7 +18,7 @@ This will create a config/settings folder and a blank settings file for each of 
 
 Now, if you open up the configuration.rb initializer, you will see something like this:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 SimpleConfig.for :application do
 
   # your app configuration here
@@ -27,7 +27,7 @@ SimpleConfig.for :application do
   load File.join(RAILS_ROOT, 'config', "settings", "local.rb"),        :if_exists? => true
   
 end
-</filter:jscode>
+</code></pre>
 
 This is where you can set any configuration variables that are required across all Rails environments. The <code>load</code> method works just like Ruby's built-in load method, except the contents of the file it loads are evaluated within the context of the <code>SimpleConfig.for</code> block. The <code>:if_exists?</code> flag, when set to true, means that the file will only be loaded if it exists, otherwise it will simply be ignored.
 
@@ -39,21 +39,21 @@ h3. Setting variables
 
 Setting variables is simple and will be familiar to anybody who has used Capistrano. Whether in your main <code>SimpleConfig.for</code> block in configuration.rb, or one of your external settings files, use the <code>set</code> method:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 SimpleConfig.for :application do
   set :my_variable, 'hello world'
 end
-</filter:jscode>
+</code></pre>
 
 SimpleConfig also supports a form of namespacing that allows you to group logical sets of variables together:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 SimpleConfig.for :application do
   group :awesome_stuff do
     set :my_variable, 'hello world'
   end
 end
-</filter:jscode>
+</code></pre>
 
 Both the <code>set</code> and <code>load</code> methods are available within <code>group</code> blocks and files loaded inside groups will be evaluated in the context of that group.
 
@@ -67,17 +67,17 @@ It is worth pointing out that <code>SimpleConfig.for</code> provides an almost s
 
 Once you have a reference to your configuration object, you can access variables using method access. Given the above example, <code>:my_variable</code> would be accessed in the following way:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 config = SimpleConfig.for(:application)
 config.my_variable # => "hello world"
-</filter:jscode>
+</code></pre>
 
 Accessing grouped variables works as you would expect:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 config = SimpleConfig.for(:application)
 config.awesome_stuff.my_variable # => "hello world"
-</filter:jscode>
+</code></pre>
 
 h3. Using your configuration in your Rails app
 
@@ -87,29 +87,29 @@ Note - there is no direct way of accessing your configuration variables in your 
 
 To use the mixin, simply include it in your ApplicationController:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 class ApplicationController < ActionController::Base
   include SimpleConfig::ControllerMixin
 end
-</filter:jscode>
+</code></pre>
 
 Then in your controllers:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 class MyController < ApplicationController
   def index
     render :text => config.my_config_variable
   end
 end
-</filter:jscode>
+</code></pre>
 
 fn1(footnote). SimpleConfig was designed with Rails 2.0 in mind but it has been tested with Rails 1.2. To use the Rails-style initializers that SimpleConfig takes advantage of in Rails 1.2, simply add this to the bottom of your environment.rb file:
 
-<filter:jscode lang="ruby">
+<pre><code class="ruby">
 # backported Rails 2.x initializer folder functionality
 Dir[File.join(RAILS_ROOT, 'config', 'initializers', '*.rb')].each do |initializer|
   load initializer
 end
-</filter:jscode>
+</code></pre>
 
 fn2(footnote). In fact, I recommend you make sure your version control system ignores this file otherwise you risk checking in a file that will override values in production! If you are using Subversion, simply add local.rb to the svn:ignore property for the config/settings folder.
