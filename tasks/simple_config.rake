@@ -10,7 +10,8 @@ namespace :simple_config do
     mkdir('config/settings')
     mkdir("config/initializers") unless File.exist?("config/initializers")
     
-    %w{ development test production }.each do |env|
+    Dir["config/environments/*.rb"].each do |f|
+      env = File.basename(f, ".rb")
       touch("config/settings/#{env}.rb")
     end
     
