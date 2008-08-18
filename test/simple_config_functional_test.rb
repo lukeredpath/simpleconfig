@@ -49,8 +49,8 @@ class SimpleConfigFunctionalTest < Test::Unit::TestCase
     assert_equal 'foo', config.test_group.inner_group.var_one
   end
   
-  def test_config_with_externally_loaded_config
-    sample_file = File.join(File.dirname(__FILE__), *%w[example_rb])
+  def test_config_with_externally_loaded_ruby_config
+    sample_file = File.join(File.dirname(__FILE__), *%w[example.rb])
     File.open(sample_file, "w") do |io|
       io << %(
         set :foo, 'bar'
@@ -62,6 +62,29 @@ class SimpleConfigFunctionalTest < Test::Unit::TestCase
     end
     
     assert_equal 'bar', config.foo
+    
+    FileUtils.rm_f(sample_file)
+  end
+  
+  def test_config_with_externally_loaded_yaml_config
+    sample_file = File.join(File.dirname(__FILE__), *%w[example.yml])
+    File.open(sample_file, "w") do |io|
+      io << %(
+      example:
+        foo: bar
+        baz: qux
+      
+      test: foo
+      )
+    end
+    
+    config = SimpleConfig.for(:my_test) do
+      load sample_file
+    end
+    
+    assert_equal 'foo', config.test
+    assert_equal 'bar', config.example.foo
+    assert_equal 'qux', config.example.baz
     
     FileUtils.rm_f(sample_file)
   end

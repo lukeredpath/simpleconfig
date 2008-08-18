@@ -1,3 +1,5 @@
+require 'yaml'
+
 module SimpleConfig
   
   class << self
@@ -53,7 +55,12 @@ module SimpleConfig
         return unless File.exist?(external_config_file)
       end
       
-      instance_eval(File.read(external_config_file))
+      case File.extname(external_config_file)
+      when /rb/
+        instance_eval(File.read(external_config_file))
+      when /yml|yaml/
+        YAMLParser.parse_contents_of_file(external_config_file).parse_into(self)
+      end
     end
     
     private
@@ -65,6 +72,32 @@ module SimpleConfig
           return get(method_name)
         else
           super(method_name, *args)
+        end
+      end
+  end
+  
+  class YAMLParser
+    def initialize(raw_yaml_data)
+      @data = YAML.load(raw_yaml_data)
+    end
+    
+    def self.parse_contents_of_file(yaml_file)
+      new(File.read(yaml_file))
+    end
+    
+    def parse_into(config)
+      @data.each do |key, value|
+        parse(key, value, config)
+      end
+    end
+    
+    private
+      def parse(key, value, config)
+        if value.is_a?(Hash)
+          group = config.group(key.to_sym)
+          value.each { |key, value| parse(key, value, group) }
+        else
+          config.set(key.to_sym, value)
         end
       end
   end

@@ -50,6 +50,20 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     @config.load('external_config.rb')
   end
   
+  def test_should_laod_and_parse_external_config_as_yaml_in_context_of_config_instance
+    parser = stub('YAMLParser')
+    SimpleConfig::YAMLParser.stubs(:parse_contents_of_file).with('external_config.yml').returns(parser)
+    parser.expects(:parse_into).with(@config)
+    @config.load('external_config.yml')
+  end
+  
+  def test_should_load_and_parse_external_config_as_yaml_if_config_file_has_full_yaml_extension
+    parser = stub('YAMLParser')
+    SimpleConfig::YAMLParser.expects(:parse_contents_of_file).with('external_config.yaml').returns(parser)
+    parser.stubs(:parse_into)
+    @config.load('external_config.yaml')
+  end
+  
   def test_should_load_and_parse_external_config_if_file_exists_when_if_exists_is_true
     File.stubs(:read).with('external_config.rb').returns(ruby_code = stub('ruby'))
     @config.expects(:instance_eval).with(ruby_code)
