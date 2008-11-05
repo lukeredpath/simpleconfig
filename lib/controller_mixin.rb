@@ -1,11 +1,31 @@
 module SimpleConfig
   module ControllerMixin
-    def self.included(klass)
-      klass.send(:helper_method, :config)
+    
+    def self.included(base)
+      base.extend     ClassMethods
+      base.class_eval do
+        include       InstanceMethods
+        helper_method :config
+      end
     end
     
-    def config
-      SimpleConfig.for(:application)
+    module ClassMethods
+      
+      # Returns the application config.
+      def config
+        SimpleConfig.for(:application)
+      end
+      
     end
+    
+    module InstanceMethods
+      
+      # Instance-level proxy to class-level +config+ method.
+      def config
+        self.class.config
+      end
+      
+    end
+    
   end
 end

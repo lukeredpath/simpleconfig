@@ -111,11 +111,11 @@ config.awesome_stuff.my_variable # => "hello world"
 
 h2. Using your configuration in your Rails app
 
-The plugin provides a convenient mixin for your ApplicationController to make configuration access as simple as possible. Assuming a configuration called "application" (as in the above examples), it defines a <code>config</code> method which can be used in any of your controllers. It also defines this as a method as a view helper using the Rails <code>helper_method</code> macro so you can access configuration data in your views. 
+The plugin provides a convenient mixin for your <code>ApplicationController</code> to make configuration access as simple as possible. Assuming a configuration called "application" (as in the above examples), it defines a <code>config</code> method which can be used in any of your controllers. It also defines this as a method as a view helper using the Rails <code>helper_method</code> macro so you can access configuration data in your views. 
 
 Note - there is no direct way of accessing your configuration variables in your models other than making a direct call to <code>SimpleConfig.for</code>. I'd recommend designing your models in such a way that configuration data can be passed into them at runtime as method arguments by your controller to avoid coupling your model to SimpleConfig.
 
-To use the mixin, simply include it in your ApplicationController:
+To use the mixin, simply include it in your <code>ApplicationController</code>:
 
 <pre><code class="ruby">
 class ApplicationController < ActionController::Base
@@ -132,6 +132,19 @@ class MyController < ApplicationController
   end
 end
 </code></pre>
+
+The mixin provides also a class-level <code>config</code> method to access the configuration when you don't have a controller instance available.
+
+<pre><code class="ruby">
+class MyController < ApplicationController
+  protect_from_forgery :secret => config.secret_token
+
+  def index
+    render :text => config.my_config_variable
+  end
+end
+</code></pre>
+
 
 fn1(footnote). SimpleConfig was designed with Rails 2.0 in mind but it has been tested with Rails 1.2. To use the Rails-style initializers that SimpleConfig takes advantage of in Rails 1.2, simply add this to the bottom of your environment.rb file:
 

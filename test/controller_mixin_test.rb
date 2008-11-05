@@ -13,6 +13,7 @@ class RailsController
 end
 
 class ControllerMixinTest < Test::Unit::TestCase
+
   def setup
     @app_config = SimpleConfig.for(:application) do
     end
@@ -20,7 +21,12 @@ class ControllerMixinTest < Test::Unit::TestCase
     @controller_klass = Class.new(RailsController)
   end
   
-  def test_should_define_a_config_method_that_returns_the_application_config_when_included
+  def test_should_define_a_config_class_method_that_returns_the_application_config_when_included
+    @controller_klass.send(:include, SimpleConfig::ControllerMixin)
+    assert_equal @app_config, @controller_klass.config
+  end
+  
+  def test_should_define_a_config_instance_method_that_returns_the_application_config_when_included
     @controller_klass.send(:include, SimpleConfig::ControllerMixin)
     assert_equal @app_config, @controller_klass.new.config
   end
