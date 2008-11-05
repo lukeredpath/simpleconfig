@@ -4,7 +4,7 @@ Rails already provides a way of configuring the framework on a per-environment b
 
 One simple solution is to simply put all of your app configuration into a YAML file and load this somewhere in your environment, but here at Reevoo we wanted something a little bit more flexible that we could use across all of our applications and Simple Config is what we came up with.
 
-h3. Getting started
+h2. Getting started
 
 The plugin comes with a rake task to get you up and running quickly, so start by running that.
 
@@ -31,7 +31,9 @@ Variables can be overwritten, and are defined in the order that they are loaded,
 
 As well as loading a settings file for your current Rails environment, a file called "local.rb" is loaded which is designed as a place for you to override variables specific to your own development environment -- you can just keep a copy of this locally without having to check it into your version control system[2].
 
-h3. Setting variables
+h2. Variables
+
+h3. Setting Variables
 
 Setting variables is simple and will be familiar to anybody who has used Capistrano. Whether in your main <code>SimpleConfig.for</code> block in configuration.rb, or one of your external settings files, use the <code>set</code> method:
 
@@ -55,7 +57,39 @@ Both the <code>set</code> and <code>load</code> methods are available within <co
 
 Whilst I'd recommend not nesting your groups more than one-level, there is no limit on how deep they can be nested.
 
-h3. Accessing your configuration
+h3. Unsetting variables
+
+Sometimes you might want to completely delete a variable from the collection. Simply setting its value to nil doesn't work because <code>nil</code> might be a valid value.
+You can delete a variable using the <code>unset</code> method.
+
+<pre><code class="ruby">
+SimpleConfig.for :application do
+  set :my_variable, 'hello world'
+  
+  ...
+  
+  unset :my_variable
+end
+</code></pre>
+
+For instance, this is useful to remove global settings at environment level instead of overwriting the default value with a nonsense-one.
+<code>unset</code> returns the value of the variable just in case you need to use it elsewhere.
+
+h3. Does a specific variable exist?
+
+I don't know but you can check it yourself using <code>exists?</code> method.
+
+<pre><code class="ruby">
+config = SimpleConfig.for :application do
+  set :my_variable, 'hello world'
+end
+
+# write some nice code 
+config.exists? :my_variable     # => true
+config.exists? :your_variable   # => false
+</code></pre>
+
+h2. Accessing your configuration
 
 SimpleConfig allows you set as many separate configurations as you like using the <code>SimpleConfig.for</code> method, which takes a symbol representing the configuration name, although most people will just create a single "application" config as above. To access this config from anywhere in your application, you can also use <code>SimpleConfig.for</code> method without a block, which always returns the named configuration object.
 
@@ -75,7 +109,7 @@ config = SimpleConfig.for(:application)
 config.awesome_stuff.my_variable # => "hello world"
 </code></pre>
 
-h3. Using your configuration in your Rails app
+h2. Using your configuration in your Rails app
 
 The plugin provides a convenient mixin for your ApplicationController to make configuration access as simple as possible. Assuming a configuration called "application" (as in the above examples), it defines a <code>config</code> method which can be used in any of your controllers. It also defines this as a method as a view helper using the Rails <code>helper_method</code> macro so you can access configuration data in your views. 
 

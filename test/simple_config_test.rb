@@ -26,6 +26,34 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     assert_nil @config.get(:some_non_existent_variable)
   end
   
+  def test_unset_should_delete_config_values
+    @config.set(:foo, 'bar')
+    assert_equal('bar', @config.foo)
+    @config.unset(:foo)
+    assert_raises(NoMethodError) { @config.foo }
+  end
+  
+  def test_unset_should_return_deleted_value
+    @config.set(:foo, 'bar')
+    assert_equal('bar', @config.unset(:foo))
+  end
+  
+  def test_exists_should_return_whether_variable_isset
+    assert(!@config.exists?(:foo))
+    @config.set(:foo, 'bar')
+    assert(@config.exists?(:foo))
+    @config.unset(:foo)
+    assert(!@config.exists?(:foo))
+  end
+  
+  def test_exists_should_consider_empty_values_as_set
+    [nil, 0, ''].each do |empty_value|
+      @config.set(:foo, empty_value)
+      assert_equal(empty_value, @config.get(:foo))
+      assert(@config.exists?(:foo))
+    end
+  end
+  
   def test_should_return_a_new_group_as_a_separate_config
     group = @config.group(:test)
     assert_instance_of(SimpleConfig::Config, group)

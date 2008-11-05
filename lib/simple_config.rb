@@ -48,6 +48,49 @@ module SimpleConfig
       @settings[key]
     end
     
+    # 
+    # Unsets any variable with given +key+ 
+    # and returns variable value if it exists, nil otherwise.
+    # Any successive call to exists? :key will return false.
+    # 
+    #   exists? :bar      # => false
+    # 
+    #   set :bar, 'foo'
+    #   exists? :bar      # => true
+    # 
+    #   unset :bar        # => 'foo'
+    #   exists? :bar      # => false
+    # 
+    def unset(key)
+      @settings.delete(key)
+    end
+    
+    # 
+    # Returns whether a variable with given +key+ is set.
+    # 
+    # Please note that this method doesn't care about variable value.
+    # A nil variable is considered as set.
+    # 
+    #   exists? :bar      # => false
+    # 
+    #   set :bar, 'foo'
+    #   exists? :bar      # => true
+    # 
+    #   set :bar, nil
+    #   exists? :bar      # => true
+    # 
+    # Use unset to completely remove a variable from the collection.
+    # 
+    #   set :bar, 'foo'
+    #   exists? :bar      # => true
+    # 
+    #   unset :bar
+    #   exists? :bar      # => false
+    # 
+    def exists?(key)
+      @settings.key?(key)
+    end
+    
     def load(external_config_file, options={})
       options.reverse_merge!(:if_exists? => false)
       
