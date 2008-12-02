@@ -10,10 +10,9 @@ namespace :simple_config do
     mkdir('config/settings')
     mkdir("config/initializers") unless File.exist?("config/initializers")
     
-    Dir["config/environments/*.rb"].each do |f|
-      env = File.basename(f, ".rb")
-      touch("config/settings/#{env}.rb")
-    end
+    environments =  Dir["config/environments/*.rb"].map { |f| File.basename(f, ".rb") }
+    environments << 'application'
+    environments.each { |env| touch("config/settings/#{env}.rb") }
     
     cp(File.join(File.dirname(__FILE__), *%w[.. templates configuration.rb]), 
         "config/initializers/configuration.rb")
