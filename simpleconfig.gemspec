@@ -11,7 +11,13 @@ Gem::Specification.new do |s|
   s.files    = [
     "lib/simple_config.rb",
     "lib/controller_mixin.rb",
-    "lib/simple_config/utilities.rb"
+    "lib/simple_config/utilities.rb",
+    "lib/rails_compatibility.rb",
+    "rails/init.rb",
+    "Rakefile",
+    "README.textile",
+    "tasks/simple_config.rake",
+    "templates/configuration.rb"
   ]
   s.test_files = [
     "test/controller_mixin_test.rb",
