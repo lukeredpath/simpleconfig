@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "simpleconfig"
-  s.version  = "1.0"
+  s.version  = "1.0.1"
   s.date     = "2008-12-05"
   s.summary  = "Simple object-oriented application settings"
   s.email    = "contact@lukeredpath.co.uk"
