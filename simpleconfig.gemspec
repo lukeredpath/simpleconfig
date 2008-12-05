@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
     "test/network_host_test.rb",
     "test/simple_config_functional_test.rb",
     "test/simple_config_test.rb",
-    "yaml_parser_test.rb"
+    "test/yaml_parser_test.rb"
   ]
 end
