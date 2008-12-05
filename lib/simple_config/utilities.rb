@@ -20,8 +20,8 @@ module SimpleConfig
       end
 
       def to_uri(uri_options = {})
-        options = uri_options.except(:host, :port)
-        URI::Generic.build(options.reverse_merge(:host => name, :port => port, :scheme => default_uri_scheme))
+        [:host, :port].each { |opt| uri_options.delete(opt) }
+        URI::Generic.build({:host => name, :port => port, :scheme => default_uri_scheme}.merge(uri_options))
       end
 
       def url_for_path(path)

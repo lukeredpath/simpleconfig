@@ -1,5 +1,14 @@
 require 'yaml'
 
+unless defined?(Rails)
+  class Object
+    def returning(object, &block)
+      yield object if block_given?
+      object
+    end
+  end
+end
+
 module SimpleConfig
   
   class << self
@@ -92,7 +101,7 @@ module SimpleConfig
     end
     
     def load(external_config_file, options={})
-      options.reverse_merge!(:if_exists? => false)
+      options = {:if_exists? => false}.merge(options)
       
       if options[:if_exists?]
         return unless File.exist?(external_config_file)
