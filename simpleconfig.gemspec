@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.email    = "contact@lukeredpath.co.uk"
   s.homepage = "http://github.com/lukeredpath/simpleconfig"
   s.description = "Simple Config is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
+  s.autorequire = "simple_config"
   s.has_rdoc = false
   s.authors  = ["Luke Redpath"]
   s.files    = [
