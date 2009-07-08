@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>lukeredpath/simpleconfig @ GitHub</title>
+	
+	<style type="text/css">
+		body {
+  		margin-top: 1.0em;
+  		background-color: #ecd2ac;
+		  font-family: "helvetica"; 
+  		color: #000000;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+		h1 { font-size: 3.8em; color: #132d53; margin-bottom: 3px; }
+		h1 .small { font-size: 0.4em; }
+		h1 a { text-decoration: none }
+		h2 { font-size: 1.5em; color: #132d53; }
+    h3 { text-align: center; color: #132d53; }
+    a { color: #132d53; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+		pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	</style>
+	
+</head>
+
+<body>
+  <a href="http://github.com/lukeredpath/simpleconfig"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/lukeredpath/simpleconfig/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/lukeredpath/simpleconfig/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+      
+    <h1><a href="http://github.com/lukeredpath/simpleconfig">simpleconfig</a> 
+      <span class="small">by <a href="http://github.com/lukeredpath">lukeredpath</a></span></h1>
+
+    <div class="description">
+      Simple Config is a plugin designed to make application-wide configuration settings easy to set and access in an object-oriented fashion.
+    </div>
+
+    <p>Rails already provides a way of configuring the framework on a per-environment basis but other than global variables/constants set in each environment file or environment.rb, there isn’t a built-in way of providing application-specific settings.
+
+One simple solution is to simply put all of your app configuration into a YAML file and load this somewhere in your environment, but here at Reevoo we wanted something a little bit more flexible that we could use across all of our applications and Simple Config is what we came up with.</p><h2>Dependencies</h2>
+<p>None.</p>
+<h2>Install</h2>
+<p>The plugin comes with a rake task to get you up and running quickly, so start by running that.
+
+$ rake simple_config:setup
+
+This will create a config/settings folder and a blank settings file for each of the main Rails environments. It will also create a copy of the SimpleConfig initializer in config/initializers/configuration.rb1.
+
+Now, if you open up the configuration.rb initializer, you will see something like this:
+
+SimpleConfig.for :application do
+
+  # your app configuration here
+
+  load File.join(RAILS_ROOT, 'config', "settings", "#{RAILS_ENV}.rb"), :if_exists? => true
+  load File.join(RAILS_ROOT, 'config', "settings", "local.rb"),        :if_exists? => true
+
+end
+
+This is where you can set any configuration variables that are required across all Rails environments. The load method works just like Ruby’s built-in load method, except the contents of the file it loads are evaluated within the context of the SimpleConfig.for block. The :if_exists? flag, when set to true, means that the file will only be loaded if it exists, otherwise it will simply be ignored.
+
+Variables can be overwritten, and are defined in the order that they are loaded, so you can set up default values in the above file and override them in the environment files.
+
+As well as loading a settings file for your current Rails environment, a file called “local.rb” is loaded which is designed as a place for you to override variables specific to your own development environment—you can just keep a copy of this locally without having to check it into your version control system2.</p>
+<h2>License</h2>
+<p>The MIT License
+
+Copyright (c) 2009 Luke Redpath
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+<h2>Authors</h2>
+<p>Luke Redpath (contact@lukeredpath.co.uk)<br/>James Adam (james@lazyatom.com)<br/>Simone Carletti (weppos@weppos.net)<br/><br/>      </p>
+<h2>Contact</h2>
+<p>Luke Redpath (luke@lukeredpath.co.uk)<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/lukeredpath/simpleconfig/zipball/master">zip</a> or
+      <a href="http://github.com/lukeredpath/simpleconfig/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/lukeredpath/simpleconfig</pre>
+    </p>
+      
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/lukeredpath/simpleconfig">lukeredpath/simpleconfig</a>
+    </div>
+    
+  </div>
+
+  
+</body>
+</html>
