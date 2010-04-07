@@ -1,16 +1,14 @@
 require 'yaml'
 
-unless defined?(Rails)
-  class Object
-    def returning(object, &block)
-      yield object if block_given?
-      object
+module SimpleConfig
+  if defined?(::BasicObject)
+    BasicObject = ::BasicObject #:nodoc:
+  else
+    class BasicObject #:nodoc:
+      instance_methods.each { |m| undef_method m unless m =~ /^__|instance_eval/ }
     end
   end
-end
 
-module SimpleConfig
-  
   class << self
     def for(config_name, &block)
       default_manager.for(config_name, &block)
@@ -27,13 +25,13 @@ module SimpleConfig
     end
     
     def for(config_name, &block)
-      returning @configs[config_name] ||= Config.new do |config|
-        config.configure(&block) if block_given?
-      end
+      @configs[config_name] ||= Config.new
+      @configs[config_name].configure(&block) if block_given?
+      @configs[config_name]
     end
   end
   
-  class Config
+  class Config < SimpleConfig::BasicObject
     def initialize
       @groups = {}
       @settings = {}
@@ -44,9 +42,9 @@ module SimpleConfig
     end
     
     def group(name, &block)
-      returning @groups[name] ||= Config.new do |group|
-        group.configure(&block) if block_given?
-      end
+      @groups[name] ||= Config.new
+      @groups[name].configure(&block) if block_given?
+      @groups[name]
     end
     
     def set(key, value)
