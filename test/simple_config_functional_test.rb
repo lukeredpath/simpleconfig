@@ -1,6 +1,7 @@
 require File.join(File.dirname(__FILE__), *%w[test_helper])
 
 require 'simple_config'
+require 'fileutils'
 
 class SimpleConfigFunctionalTest < Test::Unit::TestCase
   
