@@ -104,5 +104,49 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     File.stubs(:exist?).with('external_config.rb').returns(false)
     @config.load('external_config.rb', :if_exists? => true)
   end
+
+  def test_should_respond_to_to_hash
+    assert @config.respond_to? :to_hash
+  end
+
+  def test_should_create_hash_for_top_level
+    @config = cascaded_test_config
+
+    hash = {
+      :test => "test-setting",
+      :test_group => {
+        :inner_key => "some other value",
+        :object => {
+          :key1 => "value1"
+        }
+      }
+    }
+    assert_equal hash, @config.to_hash
+  end
+
+  def test_should_create_hash_for_second_level
+    @config = cascaded_test_config
+
+    hash = {
+      :inner_key => "some other value",
+      :object => {
+        :key1 => "value1"
+      }
+    }
+    assert_equal hash, @config.test_group.to_hash
+  end
+
+  private
+  def cascaded_test_config
+    SimpleConfig.for :simple_config_test do
+      set :test, "test-setting"
+      group :test_group do
+        set :inner_key, "some other value"
+        set :object, {
+          :key1 => "value1"
+        }
+      end
+    end
+  end
     
 end

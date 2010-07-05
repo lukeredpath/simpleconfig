@@ -100,6 +100,14 @@ module SimpleConfig
       @settings.key?(key)
     end
     
+    def to_hash
+      hash = @settings.dup
+      @groups.each do |key,group|
+        hash[key] = group.to_hash
+      end
+      hash
+    end
+
     def load(external_config_file, options={})
       options = {:if_exists? => false}.merge(options)
       
