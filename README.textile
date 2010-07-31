@@ -13,7 +13,7 @@ The plugin comes with a rake task to get you up and running quickly, so start by
 
   $ rake simple_config:setup
 
-This will create a config/settings folder and a blank settings file for each of the main Rails environments. It will also create a copy of the SimpleConfig initializer  in config/initializers/configuration.rb[1].
+This will create a config/settings folder and a blank settings file for each of the main Rails environments. It will also create a copy of the SimpleConfig initializer  in config/initializers/configuration.rb.
 
 Now, if you open up the configuration.rb initializer, you will see something like this:
 
@@ -22,8 +22,8 @@ SimpleConfig.for :application do
 
   # your app configuration here
   
-  load File.join(RAILS_ROOT, 'config', "settings", "#{RAILS_ENV}.rb"), :if_exists? => true
-  load File.join(RAILS_ROOT, 'config', "settings", "local.rb"),        :if_exists? => true
+  load File.join(Rails.root, 'config', "settings", "#{RAILS_ENV}.rb"), :if_exists? => true
+  load File.join(Rails.root, 'config', "settings", "local.rb"),        :if_exists? => true
   
 end
 </code></pre>
@@ -32,7 +32,7 @@ This is where you can set any configuration variables that are required across a
 
 Variables can be overwritten, and are defined in the order that they are loaded, so you can set up default values in the above file and override them in the environment files.
 
-As well as loading a settings file for your current Rails environment, a file called "local.rb" is loaded which is designed as a place for you to override variables specific to your own development environment -- you can just keep a copy of this locally without having to check it into your version control system[2].
+As well as loading a settings file for your current Rails environment, a file called "local.rb" is loaded which is designed as a place for you to override variables specific to your own development environment -- you can just keep a copy of this locally without having to check it into your version control system[1].
 
 h2. Variables
 
@@ -148,14 +148,4 @@ class MyController < ApplicationController
 end
 </code></pre>
 
-
-fn1(footnote). SimpleConfig was designed with Rails 2.0 in mind but it has been tested with Rails 1.2. To use the Rails-style initializers that SimpleConfig takes advantage of in Rails 1.2, simply add this to the bottom of your environment.rb file:
-
-<pre><code class="ruby">
-# backported Rails 2.x initializer folder functionality
-Dir[File.join(RAILS_ROOT, 'config', 'initializers', '*.rb')].each do |initializer|
-  load initializer
-end
-</code></pre>
-
-fn2(footnote). In fact, I recommend you make sure your version control system ignores this file otherwise you risk checking in a file that will override values in production! If you are using Subversion, simply add local.rb to the svn:ignore property for the config/settings folder.
+fn1(footnote). In fact, I recommend you make sure your version control system ignores this file otherwise you risk checking in a file that will override values in production! If you are using Subversion, simply add local.rb to the svn:ignore property for the config/settings folder.
