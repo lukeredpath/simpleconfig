@@ -1,8 +1,11 @@
-Simple Config is a plugin designed to make application-wide configuration settings easy to set and access in an object-oriented fashion.
+Simple Config is a plugin designed to make application-wide configuration settings easy to set and access in an
+ object-oriented fashion.
 
 Rails already provides a way of configuring the framework on a per-environment basis but other than global variables/constants set in each environment file or environment.rb, there isn't a built-in way of providing application-specific settings.
 
 One simple solution is to simply put all of your app configuration into a YAML file and load this somewhere in your environment, but here at Reevoo we wanted something a little bit more flexible that we could use across all of our applications and Simple Config is what we came up with.
+
+SimpleConfig was originally written against Rails 1.x and may still work but as of version 1.1.1 the minimum required Rails version is 2.3.5. You may be able to use it with older versions of Rails but YMMV.
 
 h2. Getting started
 
