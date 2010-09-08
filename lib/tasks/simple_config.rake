@@ -14,7 +14,7 @@ namespace :simple_config do
     environments << 'application'
     environments.each { |env| touch("config/settings/#{env}.rb") }
     
-    cp(File.join(File.dirname(__FILE__), *%w[.. templates configuration.rb]), 
+    cp(File.join(File.dirname(__FILE__), *%w[.. .. templates configuration.rb]), 
         "config/initializers/configuration.rb")
   end  
   
