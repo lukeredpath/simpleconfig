@@ -45,7 +45,7 @@ spec = Gem::Specification.new do |s|
     "lib/simple_config/utilities.rb",
     "lib/rails_compatibility.rb",
     "lib/tasks/simple_config.rake",
-    "rails/init.rb",
+    "init.rb",
     "Rakefile",
     "README.textile",
     "templates/configuration.rb"
