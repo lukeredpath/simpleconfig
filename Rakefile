@@ -85,5 +85,7 @@ end
 
 desc "Release to RubyGems.org"
 task :release => :package do
-  system("gem push #{spec.file_name}")
+  system("gem push pkg/#{spec.file_name}") &&
+  system("git tag -a -m 'Tagged #{spec.version} release' v#{spec.version}") &&
+  system("git push --tags")
 end
