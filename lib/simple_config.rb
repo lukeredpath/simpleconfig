@@ -46,10 +46,12 @@ module SimpleConfig
     def group(name, &block)
       (@groups[name] ||= Config.new).tap do |group|
         group.configure(&block) if block_given?
+        define_accessor(name) { @groups[name] }
       end
     end
 
     def set(key, value)
+      define_accessor(key) { @settings[key] }
       @settings[key] = value
     end
 
@@ -71,6 +73,7 @@ module SimpleConfig
     #   exists? :bar      # => false
     #
     def unset(key)
+      singleton_class.send(:remove_method, key)
       @settings.delete(key)
     end
 
@@ -124,14 +127,13 @@ module SimpleConfig
     end
 
     private
-      def method_missing(method_name, *args)
-        case true
-        when @groups.key?(method_name)
-          return @groups[method_name]
-        when @settings.key?(method_name)
-          return get(method_name)
-        else
-          super(method_name, *args)
+      def define_accessor(name, &block)
+        singleton_class.class_eval { define_method(name, &block) } unless respond_to?(name)
+      end
+
+      def singleton_class
+        class << self
+          self
         end
       end
   end
