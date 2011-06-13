@@ -21,7 +21,7 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
   def test_should_raise_NoMethodError_if_setting_does_not_exist_when_using_method_access
     assert_raises(NoMethodError) { @config.some_non_existent_variable }
   end
-  
+
   def test_should_return_nil_if_setting_does_not_exist_when_using_get
     assert_nil @config.get(:some_non_existent_variable)
   end
@@ -70,6 +70,18 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
       set :group_var, 'value'
     end
     assert_equal 'value', group.group_var
+  end
+
+  def test_should_respond_to_methods_for_settings_and_groups
+    @config.group(:grp) { set :foo, 'bar' }
+    assert(@config.respond_to?(:grp))
+    assert(@config.grp.respond_to?(:foo))
+  end
+
+  def test_should_not_overwrite_existing_methods
+    object_id = @config.object_id
+    @config.set :object_id, 'object_id'
+    assert_equal object_id, @config.object_id
   end
   
   def test_should_load_and_parse_external_config_as_ruby_in_context_of_config_instance
