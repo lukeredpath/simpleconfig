@@ -46,12 +46,12 @@ module SimpleConfig
     def group(name, &block)
       (@groups[name] ||= Config.new).tap do |group|
         group.configure(&block) if block_given?
-        define_accessor(name) { @groups[name] }
+        define_accessor(name) { group }
       end
     end
 
     def set(key, value)
-      define_accessor(key) { @settings[key] }
+      define_accessor(key) { value }
       @settings[key] = value
     end
 
