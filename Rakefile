@@ -1,8 +1,8 @@
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require "rubygems"
-require "rake/gempackagetask"
+require "rubygems/package_task"
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -66,7 +66,7 @@ end
 #
 # To publish your gem online, install the 'gemcutter' gem; Read more
 # about that here: http://gemcutter.org/pages/gem_docs
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
 
