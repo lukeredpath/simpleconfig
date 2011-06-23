@@ -1,14 +1,5 @@
 require 'yaml'
 
-unless Object.public_method_defined?(:tap)
-  class Object
-    def tap(&block)
-      yield self
-      self
-    end
-  end
-end
-
 module SimpleConfig
 
   class << self
@@ -27,9 +18,9 @@ module SimpleConfig
     end
 
     def for(config_name, &block)
-      (@configs[config_name] ||= Config.new).tap do |config|
-        config.configure(&block) if block_given?
-      end
+      config = (@configs[config_name] ||= Config.new)
+      config.configure(&block) if block_given?
+      config
     end
   end
 
@@ -44,10 +35,10 @@ module SimpleConfig
     end
 
     def group(name, &block)
-      (@groups[name] ||= Config.new).tap do |group|
-        group.configure(&block) if block_given?
-        define_accessor(name) { group }
-      end
+      group = (@groups[name] ||= Config.new)
+      group.configure(&block) if block_given?
+      define_accessor(name) { group }
+      group
     end
 
     def set(key, value)
