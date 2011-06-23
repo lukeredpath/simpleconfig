@@ -42,6 +42,7 @@ module SimpleConfig
     end
 
     def set(key, value)
+      unset(key) if set?(key)
       define_accessor(key) { value }
       @settings[key] = value
     end
@@ -115,6 +116,10 @@ module SimpleConfig
       when /yml|yaml/
         YAMLParser.parse_contents_of_file(external_config_file).parse_into(self)
       end
+    end
+
+    def set?(key)
+      @settings.key?(key)
     end
 
     private
