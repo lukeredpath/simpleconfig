@@ -7,6 +7,7 @@
 - Added ability to duplicate a config object using SimpleConfig::Config#dup (GH-14). [Thanks @andriusch]
 - Added SimpleConfig::Config#merge and SimpleConfig::Config#merge! (GH-14). [Thanks @andriusch]
 - Deprecated SimpleConfig::Utilities.
+- Deprecated SimpleConfig::ControllerMixin.
 
 ## 1.1
 

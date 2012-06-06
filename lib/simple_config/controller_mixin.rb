@@ -1,3 +1,13 @@
+warn <<-EOS
+SimpleConfig::ControllerMixin is deprecated and will be removed in SimpleConfig 2.0.
+
+If you really need this functionality, add the code to your app or consider creating a MicroGem.
+See http://jeffkreeftmeijer.com/2011/microgems-five-minute-rubygems/
+
+Please note that you might want the Config object to be available to several Rails classes, such as ActionController, ActionMailer, ActiveRecord and observers.
+EOS
+
+
 module SimpleConfig
   module ControllerMixin
     
