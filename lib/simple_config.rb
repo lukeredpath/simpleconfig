@@ -1,5 +1,3 @@
-require 'yaml'
-
 module SimpleConfig
 
   class << self
@@ -161,6 +159,7 @@ module SimpleConfig
 
   class YAMLParser
     def initialize(raw_yaml_data)
+      require 'yaml'
       @data = YAML.load(raw_yaml_data)
     end
 
