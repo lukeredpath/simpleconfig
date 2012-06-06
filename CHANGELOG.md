@@ -1,5 +1,9 @@
 # Changelog
 
+## future
+
+- Remove deprecated SimpleConfig::Utilities.
+
 ## master
 
 - Updated Rakefile.
