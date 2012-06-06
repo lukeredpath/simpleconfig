@@ -1,21 +1,11 @@
 require 'rubygems'
 require 'rubygems/package_task'
 require 'rake'
-require 'rdoc/task'
 
 
 # Run test by default.
 task :default => :test
 
-
-desc 'Generate documentation for the simpleconfig plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Simpleconfig'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
 
 # This builds the actual gem. For details of what all these options
 # mean, and other ones you can add, check the documentation here:
@@ -74,7 +64,7 @@ task :clean => [:clobber] do
 end
 
 desc "Remove any generated file"
-task :clobber => [:clobber_package, :clobber_rdoc]
+task :clobber => [:clobber_package]
 
 desc "Package the library and generates the gemspec"
 task :package => [:gemspec]
@@ -96,3 +86,17 @@ Rake::TestTask.new do |t|
   t.warning = !!ENV["WARNING"]
 end
 
+
+require 'yard/rake/yardoc_task'
+
+YARD::Rake::YardocTask.new(:yardoc) do |y|
+  y.options = ["--output-dir", "yardoc"]
+end
+
+namespace :yardoc do
+  task :clobber do
+    rm_r "yardoc" rescue nil
+  end
+end
+
+task :clobber => "yardoc:clobber"
