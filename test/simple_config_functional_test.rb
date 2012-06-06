@@ -1,3 +1,4 @@
+require 'test_helper'
 require 'fileutils'
 
 class SimpleConfigFunctionalTest < Test::Unit::TestCase
