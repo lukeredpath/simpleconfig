@@ -25,6 +25,7 @@ module SimpleConfig
   end
 
   class Config
+
     def initialize
       @groups = {}
       @settings = {}
@@ -57,7 +58,6 @@ module SimpleConfig
       @settings[key]
     end
 
-    #
     # Unsets any variable with given +key+
     # and returns variable value if it exists, nil otherwise.
     # Any successive call to exists? :key will return false.
@@ -70,12 +70,13 @@ module SimpleConfig
     #   unset :bar        # => 'foo'
     #   exists? :bar      # => false
     #
+    # @param  [Symbol] The key to unset.
+    # @return The current value for +:key+.
     def unset(key)
       singleton_class.send(:remove_method, key)
       @settings.delete(key)
     end
 
-    #
     # Returns whether a variable with given +key+ is set.
     #
     # Please note that this method doesn't care about variable value.
@@ -97,6 +98,8 @@ module SimpleConfig
     #   unset :bar
     #   exists? :bar      # => false
     #
+    # @param  [Symbol] The key to check.
+    # @return [Boolean] True if the key is set.
     def exists?(key)
       @settings.key?(key)
     end
