@@ -30,6 +30,12 @@ module SimpleConfig
       @settings = {}
     end
 
+    def dup
+      self.class.new.tap do |duplicate|
+        duplicate.merge!(to_hash)
+      end
+    end
+
     def configure(&block)
       instance_eval(&block)
     end
@@ -103,6 +109,21 @@ module SimpleConfig
       hash
     end
 
+    def merge!(hash)
+      hash.each do |key, value|
+        if value.is_a?(Hash)
+          group(key.to_sym).merge!(value)
+        else
+          set(key.to_sym, value)
+        end
+      end
+      self
+    end
+
+    def merge(hash)
+      dup.merge!(hash)
+    end
+
     def load(external_config_file, options={})
       options = {:if_exists? => false}.merge(options)
 
@@ -124,7 +145,7 @@ module SimpleConfig
 
     private
       def define_accessor(name, &block)
-        singleton_class.class_eval { define_method(name, &block) } unless respond_to?(name)
+        singleton_class.class_eval { define_method(name, &block) } if !respond_to?(name) || exists?(name)
       end
 
       def singleton_class
@@ -144,20 +165,8 @@ module SimpleConfig
     end
 
     def parse_into(config)
-      @data.each do |key, value|
-        parse(key, value, config)
-      end
+      config.merge!(@data)
     end
-
-    private
-      def parse(key, value, config)
-        if value.is_a?(Hash)
-          group = config.group(key.to_sym)
-          value.each { |key, value| parse(key, value, group) }
-        else
-          config.set(key.to_sym, value)
-        end
-      end
   end
 
 end
