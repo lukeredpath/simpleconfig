@@ -1,6 +1,4 @@
-require File.join(File.dirname(__FILE__), *%w[test_helper])
-
-require 'simple_config'
+require 'test_helper'
 require 'simple_config/controller_mixin'
 
 class RailsController

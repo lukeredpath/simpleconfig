@@ -1,5 +1,4 @@
-require File.join(File.dirname(__FILE__), *%w[test_helper])
-
+require 'test_helper'
 require 'simple_config/utilities'
 
 class NetworkHostTest < Test::Unit::TestCase
