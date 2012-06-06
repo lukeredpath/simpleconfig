@@ -1,3 +1,5 @@
+require 'simple_config/version'
+
 module SimpleConfig
 
   class << self

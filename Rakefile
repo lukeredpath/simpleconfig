@@ -2,6 +2,9 @@ require 'rubygems'
 require 'rubygems/package_task'
 require 'bundler'
 
+$:.unshift(File.dirname(__FILE__) + "/lib")
+require 'simple_config/version'
+
 
 # Run test by default.
 task :default => :test
@@ -14,7 +17,7 @@ task :default => :test
 #
 spec = Gem::Specification.new do |s|
   s.name     = "simpleconfig"
-  s.version  = "1.1.3"
+  s.version  = SimpleConfig::VERSION
   s.summary  = "Simple object-oriented application settings for Ruby applications"
   s.description = "SimpleConfig is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
 
