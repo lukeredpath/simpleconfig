@@ -27,7 +27,7 @@ module SimpleConfig
   class Config
 
     def initialize
-      @groups = {}
+      @groups   = {}
       @settings = {}
     end
 
@@ -104,6 +104,10 @@ module SimpleConfig
       @settings.key?(key)
     end
 
+    def set?(key)
+      @settings.key?(key)
+    end
+
     def to_hash
       hash = @settings.dup
       @groups.each do |key,group|
@@ -142,20 +146,17 @@ module SimpleConfig
       end
     end
 
-    def set?(key)
-      @settings.key?(key)
+  private
+
+    def define_accessor(name, &block)
+      singleton_class.class_eval { define_method(name, &block) } if !respond_to?(name) || exists?(name)
     end
 
-    private
-      def define_accessor(name, &block)
-        singleton_class.class_eval { define_method(name, &block) } if !respond_to?(name) || exists?(name)
+    def singleton_class
+      class << self
+        self
       end
-
-      def singleton_class
-        class << self
-          self
-        end
-      end
+    end
   end
 
   class YAMLParser
