@@ -1,5 +1,11 @@
 require 'uri'
 
+warn <<-EOS
+SimpleConfig::Utilities is deprecated and will be removed in SimpleConfig 2.0.
+Please package it as a Gem or MicroGem.
+See http://jeffkreeftmeijer.com/2011/microgems-five-minute-rubygems/
+EOS
+
 module SimpleConfig
   module Utilities
     class NetworkHost
