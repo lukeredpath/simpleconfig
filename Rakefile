@@ -1,18 +1,12 @@
+require 'rubygems'
+require 'rubygems/package_task'
 require 'rake'
-require 'rake/testtask'
 require 'rdoc/task'
-require "rubygems"
-require "rubygems/package_task"
 
-desc 'Default: run unit tests.'
+
+# Run test by default.
 task :default => :test
 
-desc 'Test the simpleconfig plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
 
 desc 'Generate documentation for the simpleconfig plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
@@ -74,12 +68,16 @@ task :gemspec do
   File.open(file, "w") {|f| f << spec.to_ruby }
 end
 
-task :package => :gemspec
-
-desc 'Clear out RDoc and generated packages'
-task :clean => [:clobber_rdoc, :clobber_package] do
-  rm "#{spec.name}.gemspec"
+desc "Remove any temporary products, including gemspec"
+task :clean => [:clobber] do
+  rm "#{spec.name}.gemspec" if File.file?("#{spec.name}.gemspec")
 end
+
+desc "Remove any generated file"
+task :clobber => [:clobber_package, :clobber_rdoc]
+
+desc "Package the library and generates the gemspec"
+task :package => [:gemspec]
 
 desc "Release to RubyGems.org"
 task :release => :package do
@@ -87,3 +85,14 @@ task :release => :package do
   system("git tag -a -m 'Tagged #{spec.version} release' v#{spec.version}") &&
   system("git push --tags")
 end
+
+
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/**/*_test.rb"]
+  t.verbose = !!ENV["VERBOSE"]
+  t.warning = !!ENV["WARNING"]
+end
+
