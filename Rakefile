@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rubygems/package_task'
-require 'rake'
+require 'bundler'
 
 
 # Run test by default.
@@ -26,6 +26,9 @@ spec = Gem::Specification.new do |s|
   s.files             = `git ls-files`.split("\n")
   s.test_files        = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths     = %w( lib )
+
+  s.add_development_dependency("rake")
+  s.add_development_dependency("yard")
 end
 
 Gem::PackageTask.new(spec) do |pkg|
