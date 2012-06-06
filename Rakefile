@@ -15,13 +15,12 @@ task :default => :test
 spec = Gem::Specification.new do |s|
   s.name     = "simpleconfig"
   s.version  = "1.1.3"
-  s.date     = "2010-09-13"
   s.summary  = "Simple object-oriented application settings for Ruby applications"
+  s.description = "SimpleConfig is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
+
+  s.authors  = ["Luke Redpath"]
   s.email    = "luke@lukeredpath.co.uk"
   s.homepage = "http://github.com/lukeredpath/simpleconfig"
-  s.description = "SimpleConfig is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
-  s.has_rdoc = false
-  s.authors  = ["Luke Redpath"]
 
   s.files             = `git ls-files`.split("\n")
   s.test_files        = `git ls-files -- {test,spec,features}/*`.split("\n")
