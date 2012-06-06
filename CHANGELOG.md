@@ -3,6 +3,7 @@
 ## future
 
 - Remove deprecated SimpleConfig::Utilities.
+- Remove deprecated SimpleConfig::ControllerMixin.
 
 ## master
 
