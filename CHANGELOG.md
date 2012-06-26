@@ -4,6 +4,7 @@
 
 - Remove deprecated SimpleConfig::Utilities.
 - Remove deprecated SimpleConfig::ControllerMixin.
+- Remove pre-Rails 3 init.rb file.
 
 ## master
 
