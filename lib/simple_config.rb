@@ -1,4 +1,5 @@
 require 'simple_config/version'
+require 'simple_config/railtie' if defined?(Rails)
 
 module SimpleConfig
 
