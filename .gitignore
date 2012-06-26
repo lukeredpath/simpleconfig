@@ -1,3 +1,8 @@
-*.gem
-pkg
-rdoc
+# Bundler
+.bundle
+Gemfile.lock
+pkg/*
+
+# YARD
+.yardoc
+yardoc/
