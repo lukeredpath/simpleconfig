@@ -7,6 +7,9 @@ One simple solution is to simply put all of your app configuration into a YAML f
 
 SimpleConfig was originally written against Rails 1.x and may still work but as of version 1.1.1 the minimum required Rails version is 2.3.5. You may be able to use it with older versions of Rails but YMMV.
 
+WARNING: SimpleConfig 1.x is not fully compatible with Rails 3. It works, but the rake tasks are not automatically loaded. Please upgrade to SimpleConfig 2.0 if you are using Rails 3.
+
+
 ## Getting started
 
 The plugin comes with a rake task to get you up and running quickly, so start by running that.
