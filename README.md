@@ -1,29 +1,41 @@
 Simple Config is a plugin designed to make application-wide configuration settings easy to set and access in an
  object-oriented fashion.
 
-Rails already provides a way of configuring the framework on a per-environment basis but other than global variables/constants set in each environment file or environment.rb, there isn't a built-in way of providing application-specific settings.
+This library was originally designed to be a Rails plugin, but it's now a standard Ruby library with no dependency on Rails. You can use it in any Ruby application or project.
 
-One simple solution is to simply put all of your app configuration into a YAML file and load this somewhere in your environment, but I wanted something a little bit more flexible that we could use across all of our applications and Simple Config is what we came up with.
 
-SimpleConfig was originally written against Rails 1.x and may still work but as of version 1.1.1 the minimum required Rails version is 2.3.5. You may be able to use it with older versions of Rails but YMMV.
+## Rails Configuration vs SimpleConfig
+
+Rails already provides a way of configuring the framework on a per-environment or application basis, but the more the application becomes complex, the more the feature shows its limit.
+
+One common solution is to put your app configuration into YAML files and load them somewhere in your environment, but when you have many developers and dynamic configurations this is not always the best choice.
+
+Compared to the default Rails configuration system, SimpleConfig provides the following additional features:
+
+- Ability to define per developer settings using the `local.rb` file
+- Ability to nest configurations in groups
+- Ability to clone configs
+- Ability to load unlimited configuration scripts
+
 
 ## Getting started
 
 The plugin comes with a rake task to get you up and running quickly, so start by running that.
 
-  $ rake simple_config:setup
+  $ rake simpleconfig:setup
 
-This will create a config/settings folder and a blank settings file for each of the main Rails environments. It will also create a copy of the SimpleConfig initializer  in config/initializers/configuration.rb.
+This will create a `config/settings` folder and a blank settings file for each of the main Rails environments. It will also create a copy of the SimpleConfig initializer in `config/initializers/configuration.rb`.
 
-Now, if you open up the configuration.rb initializer, you will see something like this:
+Now, if you open up the `configuration.rb` initializer, you will see something like this:
 
 ```ruby
 SimpleConfig.for :application do
 
   # your app configuration here
   
-  load File.join(Rails.root, 'config', "settings", "#{RAILS_ENV}.rb"), :if_exists? => true
-  load File.join(Rails.root, 'config', "settings", "local.rb"),        :if_exists? => true
+  load File.join(Rails.root, "config", "settings", "application.rb"),   :if_exists? => true
+  load File.join(Rails.root, "config", "settings", "#{RAILS_ENV}.rb"),  :if_exists? => true
+  load File.join(Rails.root, "config", "settings", "local.rb"),         :if_exists? => true
   
 end
 ```
@@ -33,6 +45,7 @@ This is where you can set any configuration variables that are required across a
 Variables can be overwritten, and are defined in the order that they are loaded, so you can set up default values in the above file and override them in the environment files.
 
 As well as loading a settings file for your current Rails environment, a file called "local.rb" is loaded which is designed as a place for you to override variables specific to your own development environment -- you can just keep a copy of this locally without having to check it into your version control system[1].
+
 
 ## Variables
 
@@ -114,38 +127,56 @@ config.awesome_stuff.my_variable # => "hello world"
 
 ## Using your configuration in your Rails app
 
-The plugin provides a convenient mixin for your `ApplicationController` to make configuration access as simple as possible. Assuming a configuration called "application" (as in the above examples), it defines a `config` method which can be used in any of your controllers. It also defines this as a method as a view helper using the Rails `helper_method` macro so you can access configuration data in your views. 
-
-Note - there is no direct way of accessing your configuration variables in your models other than making a direct call to `SimpleConfig.for`. I'd recommend designing your models in such a way that configuration data can be passed into them at runtime as method arguments by your controller to avoid coupling your model to SimpleConfig.
-
-To use the mixin, simply include it in your `ApplicationController`:
+When the application is initalized, by default the configurations are stored in the `:application` stack. You can access them anywhere using
 
 ```ruby
+SimpleConfig.for(:application)
+```
+
+It's a common habit to define a `config` method in your Rails application or Rails libraries to have quick access to the configuration object. You can also use a mixin.
+
+```ruby
+class Configurable
+  def config
+    SimpleConfig.for(:application)
+  end
+end
+
 class ApplicationController < ActionController::Base
-  include SimpleConfig::ControllerMixin
+  extend  Configurable
+  include Configurable
+
+  def do_something
+    # here you can use config
+    if config.my_variable 
+      render :foo
+    end
+      render :bar
+    else
+  end
+
 end
 ```
 
-Then in your controllers:
+An other very common pattern is to assing your configuration object to a constant so that it becomes globally available in your Rails project.
 
 ```ruby
-class MyController < ApplicationController
-  def index
-    render :text => config.my_config_variable
-  end
-end
+# config/initializers/configuration.rb
+# after the initialization block
+CONFIG = SimpleConfig.for :app
 ```
 
-The mixin provides also a class-level `config` method to access the configuration when you don't have a controller instance available.
+Then anywhere in your app
 
 ```ruby
-class MyController < ApplicationController
-  protect_from_forgery :secret => config.secret_token
-
-  def index
-    render :text => config.my_config_variable
+def do_something
+  if CONFIG.my_variable 
+    render :foo
   end
+    render :bar
+  else
 end
 ```
 
-fn1(footnote). In fact, I recommend you make sure your version control system ignores this file otherwise you risk checking in a file that will override values in production! If you are using Subversion, simply add local.rb to the svn:ignore property for the config/settings folder.
+
+fn1(footnote). In fact, I recommend you make sure your version control system ignores this file otherwise you risk checking in a file that will override values in production!
