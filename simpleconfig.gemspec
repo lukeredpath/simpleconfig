@@ -2,19 +2,19 @@
 
 Gem::Specification.new do |s|
   s.name = "simpleconfig"
-  s.version = "1.1.3"
+  s.version = "2.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Luke Redpath"]
-  s.date = "2012-06-06"
+  s.authors = ["Luke Redpath", "Simone Carletti"]
+  s.date = "2012-06-27"
   s.description = "SimpleConfig is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
-  s.email = "luke@lukeredpath.co.uk"
-  s.files = [".gitignore", "CHANGELOG.md", "Gemfile", "MIT-LICENSE", "README.md", "Rakefile", "init.rb", "lib/simple_config.rb", "lib/simple_config/controller_mixin.rb", "lib/simple_config/utilities.rb", "lib/simpleconfig.rb", "lib/tasks/simple_config.rake", "simpleconfig.gemspec", "templates/configuration.rb", "test/controller_mixin_test.rb", "test/network_host_test.rb", "test/simple_config_functional_test.rb", "test/simple_config_test.rb", "test/test_helper.rb", "test/yaml_parser_test.rb"]
+  s.email = ["luke@lukeredpath.co.uk", "weppos@weppos.net"]
+  s.files = [".gitignore", "CHANGELOG.md", "Gemfile", "LICENSE", "README.md", "Rakefile", "lib/simple_config.rb", "lib/simple_config/railtie.rb", "lib/simple_config/version.rb", "lib/simpleconfig.rb", "simpleconfig.gemspec", "templates/configuration.rb", "test/simple_config_functional_test.rb", "test/simple_config_test.rb", "test/test_helper.rb", "test/yaml_parser_test.rb"]
   s.homepage = "http://github.com/lukeredpath/simpleconfig"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.21"
+  s.rubygems_version = "1.8.24"
   s.summary = "Simple object-oriented application settings for Ruby applications"
-  s.test_files = ["test/controller_mixin_test.rb", "test/network_host_test.rb", "test/simple_config_functional_test.rb", "test/simple_config_test.rb", "test/test_helper.rb", "test/yaml_parser_test.rb"]
+  s.test_files = ["test/simple_config_functional_test.rb", "test/simple_config_test.rb", "test/test_helper.rb", "test/yaml_parser_test.rb"]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
