@@ -1,13 +1,13 @@
 # Changelog
 
-## future
+## master
 
 - Remove deprecated SimpleConfig::Utilities.
 - Remove deprecated SimpleConfig::ControllerMixin.
 - Remove pre-Rails 3 init.rb file.
 - Add Rails 3 support using Railtie.
 
-## master
+## 1.2.0
 
 - Updated Rakefile.
 - Added support for Bundler.
@@ -16,7 +16,7 @@
 - Deprecated SimpleConfig::Utilities.
 - Deprecated SimpleConfig::ControllerMixin.
 
-## 1.1
+## 1.1.0
 
 - Added #to_hash method (via markschmidt)
 
