@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## 1.2.0
 
 - Updated Rakefile.
 - Added support for Bundler.
@@ -9,7 +9,7 @@
 - Deprecated SimpleConfig::Utilities.
 - Deprecated SimpleConfig::ControllerMixin.
 
-## 1.1
+## 1.1.0
 
 - Added #to_hash method (via markschmidt)
 
