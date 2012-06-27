@@ -1,11 +1,24 @@
-require File.join(File.dirname(__FILE__), *%w[test_helper])
-
-require 'simple_config'
+require 'test_helper'
 
 class SimpleConfigConfigTest < Test::Unit::TestCase
 
   def setup
     @config = SimpleConfig::Config.new
+  end
+
+  def test_dup_creates_deep_clone
+    new_config = cascaded_test_config.dup
+    new_config.configure do
+      group :test_group do
+        set :inner_key, 'new_foo'
+      end
+      set :test, 'new_test'
+    end
+
+    assert_equal 'test-setting', cascaded_test_config.test
+    assert_equal 'some other value', cascaded_test_config.test_group.inner_key
+    assert_equal 'new_test', new_config.test
+    assert_equal 'new_foo', new_config.test_group.inner_key
   end
 
   def test_should_be_able_to_set_config_values
@@ -154,7 +167,26 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     assert_equal "new-test-setting", @config.test
   end
 
-  private
+  def test_config_merge_hash
+    config = SimpleConfig::Config.new
+    config.merge!(:example => {:foo => 'bar', :baz => 'qux'}, :test => 'foo')
+
+    assert_equal 'foo', config.test
+    assert_equal 'bar', config.example.foo
+    assert_equal 'qux', config.example.baz
+  end
+
+  def test_config_merge_hash_non_destructive
+    new_config = cascaded_test_config.merge(:test_group => {:inner_key => 'bar'}, :test => 'qux')
+
+    assert_equal 'test-setting', cascaded_test_config.test
+    assert_equal 'some other value', cascaded_test_config.test_group.inner_key
+    
+    assert_equal 'qux', new_config.test
+    assert_equal 'bar', new_config.test_group.inner_key
+  end
+
+private
 
   def cascaded_test_config
     SimpleConfig.for :simple_config_test do

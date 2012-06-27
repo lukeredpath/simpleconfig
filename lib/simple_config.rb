@@ -1,4 +1,5 @@
-require 'yaml'
+require 'simple_config/version'
+require 'simple_config/railtie' if defined?(Rails)
 
 module SimpleConfig
 
@@ -25,9 +26,16 @@ module SimpleConfig
   end
 
   class Config
+
     def initialize
-      @groups = {}
+      @groups   = {}
       @settings = {}
+    end
+
+    def dup
+      self.class.new.tap do |duplicate|
+        duplicate.merge!(to_hash)
+      end
     end
 
     def configure(&block)
@@ -51,7 +59,6 @@ module SimpleConfig
       @settings[key]
     end
 
-    #
     # Unsets any variable with given +key+
     # and returns variable value if it exists, nil otherwise.
     # Any successive call to exists? :key will return false.
@@ -64,12 +71,13 @@ module SimpleConfig
     #   unset :bar        # => 'foo'
     #   exists? :bar      # => false
     #
+    # @param  [Symbol] The key to unset.
+    # @return The current value for +:key+.
     def unset(key)
       singleton_class.send(:remove_method, key)
       @settings.delete(key)
     end
 
-    #
     # Returns whether a variable with given +key+ is set.
     #
     # Please note that this method doesn't care about variable value.
@@ -91,7 +99,13 @@ module SimpleConfig
     #   unset :bar
     #   exists? :bar      # => false
     #
+    # @param  [Symbol] The key to check.
+    # @return [Boolean] True if the key is set.
     def exists?(key)
+      @settings.key?(key)
+    end
+
+    def set?(key)
       @settings.key?(key)
     end
 
@@ -101,6 +115,21 @@ module SimpleConfig
         hash[key] = group.to_hash
       end
       hash
+    end
+
+    def merge!(hash)
+      hash.each do |key, value|
+        if value.is_a?(Hash)
+          group(key.to_sym).merge!(value)
+        else
+          set(key.to_sym, value)
+        end
+      end
+      self
+    end
+
+    def merge(hash)
+      dup.merge!(hash)
     end
 
     def load(external_config_file, options={})
@@ -118,24 +147,22 @@ module SimpleConfig
       end
     end
 
-    def set?(key)
-      @settings.key?(key)
+  private
+
+    def define_accessor(name, &block)
+      singleton_class.class_eval { define_method(name, &block) } if !respond_to?(name) || exists?(name)
     end
 
-    private
-      def define_accessor(name, &block)
-        singleton_class.class_eval { define_method(name, &block) } unless respond_to?(name)
+    def singleton_class
+      class << self
+        self
       end
-
-      def singleton_class
-        class << self
-          self
-        end
-      end
+    end
   end
 
   class YAMLParser
     def initialize(raw_yaml_data)
+      require 'yaml'
       @data = YAML.load(raw_yaml_data)
     end
 
@@ -144,20 +171,8 @@ module SimpleConfig
     end
 
     def parse_into(config)
-      @data.each do |key, value|
-        parse(key, value, config)
-      end
+      config.merge!(@data)
     end
-
-    private
-      def parse(key, value, config)
-        if value.is_a?(Hash)
-          group = config.group(key.to_sym)
-          value.each { |key, value| parse(key, value, group) }
-        else
-          config.set(key.to_sym, value)
-        end
-      end
   end
 
 end

@@ -1,4 +1,6 @@
-require 'test/unit'
 require 'rubygems'
+require 'test/unit'
 require 'mocha'
-$LOAD_PATH << File.join(File.dirname(__FILE__), *%w[.. lib])
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'simple_config'
