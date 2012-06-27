@@ -21,8 +21,8 @@ spec = Gem::Specification.new do |s|
   s.summary  = "Simple object-oriented application settings for Ruby applications"
   s.description = "SimpleConfig is a plugin designed to make application-wide configuration settings (e.g. in a Rails app) easy to set and access in an object-oriented fashion."
 
-  s.authors  = ["Luke Redpath"]
-  s.email    = "luke@lukeredpath.co.uk"
+  s.authors  = ["Luke Redpath", "Simone Carletti"]
+  s.email    = ["luke@lukeredpath.co.uk", "weppos@weppos.net"]
   s.homepage = "http://github.com/lukeredpath/simpleconfig"
 
   s.files             = `git ls-files`.split("\n")
