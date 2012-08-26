@@ -96,7 +96,7 @@ For instance, this is useful to remove global settings at environment level inst
 I don't know but you can check it yourself using `exists?` method.
 
 ```ruby
-config = SimpleConfig.for :application do
+config = SimpleConfig.for(:application) do
   set :my_variable, 'hello world'
 end
 
@@ -136,7 +136,7 @@ SimpleConfig.for(:application)
 It's a common habit to define a `config` method in your Rails application or Rails libraries to have quick access to the configuration object. You can also use a mixin.
 
 ```ruby
-class Configurable
+module Configurable
   def config
     SimpleConfig.for(:application)
   end
