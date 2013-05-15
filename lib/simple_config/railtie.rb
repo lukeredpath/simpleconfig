@@ -1,7 +1,7 @@
 require 'simple_config'
 require 'rails'
 
-module Airbrake
+module SimpleConfig
   class Railtie < ::Rails::Railtie
 
     rake_tasks do
