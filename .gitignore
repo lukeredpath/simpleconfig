@@ -6,3 +6,6 @@ pkg/*
 # YARD
 .yardoc
 yardoc/
+
+test/example*
+.ruby-*
