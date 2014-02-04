@@ -57,6 +57,11 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     assert(@config.exists?(:foo))
     @config.unset(:foo)
     assert(!@config.exists?(:foo))
+    @config.group(:bats) do
+      set :foo, 'bar'
+    end
+    assert(@config.exists?(:bats))
+    assert(@config.bats.exists?(:foo))
   end
 
   def test_exists_should_consider_empty_values_as_set
@@ -103,7 +108,7 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     @config.load('external_config.rb')
   end
 
-  def test_should_laod_and_parse_external_config_as_yaml_in_context_of_config_instance
+  def test_should_load_and_parse_external_config_as_yaml_in_context_of_config_instance
     parser = stub('YAMLParser')
     SimpleConfig::YAMLParser.stubs(:parse_contents_of_file).with('external_config.yml').returns(parser)
     parser.expects(:parse_into).with(@config)

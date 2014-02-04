@@ -102,7 +102,7 @@ module SimpleConfig
     # @param  [Symbol] The key to check.
     # @return [Boolean] True if the key is set.
     def exists?(key)
-      @settings.key?(key)
+      @settings.key?(key) || @groups.key?(key)
     end
 
     def set?(key)
