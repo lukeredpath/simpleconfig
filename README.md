@@ -36,11 +36,12 @@ SimpleConfig.for :application do
   load File.join(Rails.root, "config", "settings", "application.rb"),   :if_exists? => true
   load File.join(Rails.root, "config", "settings", "#{RAILS_ENV}.rb"),  :if_exists? => true
   load File.join(Rails.root, "config", "settings", "local.rb"),         :if_exists? => true
+  load File.join(Rails.root, "config", "settings", 'config.yml'),       :if_exists? => true
   
 end
 ```
 
-This is where you can set any configuration variables that are required across all Rails environments. The `load` method works just like Ruby's built-in load method, except the contents of the file it loads are evaluated within the context of the `SimpleConfig.for` block. The `:if_exists?` flag, when set to true, means that the file will only be loaded if it exists, otherwise it will simply be ignored.
+This is where you can set any configuration variables that are required across all Rails environments. The `load` method works just like Ruby's built-in load method, except the contents of the file it loads are evaluated within the context of the `SimpleConfig.for` block. It can read and parse YML files as well. The `:if_exists?` flag, when set to true, means that the file will only be loaded if it exists, otherwise it will simply be ignored.
 
 Variables can be overwritten, and are defined in the order that they are loaded, so you can set up default values in the above file and override them in the environment files.
 
