@@ -45,14 +45,14 @@ class YAMLParserTest < Test::Unit::TestCase
   end
 
   def test_parsing_of_erb
-    x = y = 1666
-    template = ERB.new <<-EOF
-    x: <%= x %>
-    y: <%= y / 4 %>
+    raw_data = <<-EOF
+    a_test: <%= 6 / 3 %>
+    b_test: <%= 5 * 5 %>
     EOF
-    parser = YAMLParser.new(template.to_yaml)
-    assert_equal 1666, @config.x
-    assert_equal 416, @config.y
+    parser = YAMLParser.new(raw_data)
+    parser.parse_into(@config)
+    assert_equal 2, @config.a_test
+    assert_equal 25, @config.b_test
   end
 end
 
