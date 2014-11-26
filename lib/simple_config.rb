@@ -163,7 +163,8 @@ module SimpleConfig
   class YAMLParser
     def initialize(raw_yaml_data)
       require 'yaml'
-      @data = YAML.load(raw_yaml_data)
+      require 'erb'
+      @data = YAML.load(ERB.new(raw_yaml_data).result(binding))
     end
 
     def self.parse_contents_of_file(yaml_file)
