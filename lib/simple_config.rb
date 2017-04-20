@@ -77,7 +77,7 @@ module SimpleConfig
       singleton_class.send(:remove_method, key)
       setting = @settings.delete(key)
       # If there was a setting return that, otherwise continue to try and remove a group which may exist
-      return setting if setting
+      return setting if setting.nil?
       @groups.delete(key)
     end
 
