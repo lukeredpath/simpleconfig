@@ -75,7 +75,10 @@ module SimpleConfig
     # @return The current value for +:key+.
     def unset(key)
       singleton_class.send(:remove_method, key)
-      @settings.delete(key)
+      setting = @settings.delete(key)
+      # If there was a setting return that, otherwise continue to try and remove a group which may exist
+      return setting unless setting.nil?
+      @groups.delete(key)
     end
 
     # Returns whether a variable with given +key+ is set.
@@ -102,7 +105,7 @@ module SimpleConfig
     # @param  [Symbol] The key to check.
     # @return [Boolean] True if the key is set.
     def exists?(key)
-      @settings.key?(key)
+      @settings.key?(key) || @groups.key?(key)
     end
 
     def set?(key)
