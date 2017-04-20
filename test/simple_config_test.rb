@@ -51,6 +51,24 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     assert_equal('bar', @config.unset(:foo))
   end
 
+  def test_unset_should_delete_group
+    assert(!@config.to_hash.key?(:foo))
+    @config.group :foo do
+      set :bar, 'baz'
+    end
+    assert(@config.to_hash.key?(:foo))
+    @config.unset(:foo)
+    assert(!@config.to_hash.key?(:foo))
+  end
+
+  def test_unset_should_return_deleted_group
+    assert(!@config.to_hash.key?(:foo))
+    @config.group :foo do
+      set :bar, 'baz'
+    end
+    assert_equal(@config.foo, @config.unset(:foo))
+  end
+
   def test_exists_should_return_whether_variable_isset
     assert(!@config.exists?(:foo))
     @config.set(:foo, 'bar')
