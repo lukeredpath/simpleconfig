@@ -77,6 +77,16 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
     assert(!@config.exists?(:foo))
   end
 
+  def test_exists_should_return_whether_group_exists
+    assert(!@config.exists?(:foo))
+    @config.group :foo do
+      set :bar, 'baz'
+    end
+    assert(@config.exists?(:foo))
+    @config.unset(:foo)
+    assert(!@config.exists?(:foo))
+  end
+
   def test_exists_should_consider_empty_values_as_set
     [nil, 0, ''].each do |empty_value|
       @config.set(:foo, empty_value)
