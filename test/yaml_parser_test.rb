@@ -43,6 +43,17 @@ class YAMLParserTest < Test::Unit::TestCase
     
     assert_equal 'bar', @config.group1.group2.foo
   end
+
+  def test_parsing_of_erb
+    raw_data = <<-EOF
+    a_test: <%= 6 / 3 %>
+    b_test: <%= 5 * 5 %>
+    EOF
+    parser = YAMLParser.new(raw_data)
+    parser.parse_into(@config)
+    assert_equal 2, @config.a_test
+    assert_equal 25, @config.b_test
+  end
 end
 
 class YAMLParserFromContentsOfFile < Test::Unit::TestCase
