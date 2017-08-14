@@ -99,7 +99,7 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
 
   def test_should_load_and_parse_external_config_as_ruby_in_context_of_config_instance
     File.stubs(:read).with('external_config.rb').returns(ruby_code = stub('ruby'))
-    @config.expects(:instance_eval).with(ruby_code)
+    @config.expects(:instance_eval).with(ruby_code, 'external_config.rb')
     @config.load('external_config.rb')
   end
 
@@ -119,7 +119,7 @@ class SimpleConfigConfigTest < Test::Unit::TestCase
 
   def test_should_load_and_parse_external_config_if_file_exists_when_if_exists_is_true
     File.stubs(:read).with('external_config.rb').returns(ruby_code = stub('ruby'))
-    @config.expects(:instance_eval).with(ruby_code)
+    @config.expects(:instance_eval).with(ruby_code, 'external_config.rb')
     File.stubs(:exist?).with('external_config.rb').returns(true)
     @config.load('external_config.rb', :if_exists? => true)
   end

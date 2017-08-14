@@ -141,7 +141,7 @@ module SimpleConfig
 
       case File.extname(external_config_file)
       when /rb/
-        instance_eval(File.read(external_config_file))
+        instance_eval(File.read(external_config_file), external_config_file.to_s)
       when /yml|yaml/
         YAMLParser.parse_contents_of_file(external_config_file).parse_into(self)
       end
